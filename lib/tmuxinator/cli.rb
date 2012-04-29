@@ -146,6 +146,15 @@ module Tmuxinator
       end
       alias :s :start
 
+      def debug_tmux_config *args
+        exit!("You must specify a name for the new project") unless args.size > 0
+        puts "warning: passing multiple arguments to open will be ignored" if args.size > 1
+        project_name = args.shift
+        config_path = "#{root_dir}#{project_name}.yml"
+        config = Tmuxinator::ConfigWriter.new(config_path).render
+        puts config
+      end
+
       def method_missing method, *args, &block
         start method if File.exists?("#{root_dir}#{method}.yml")
         puts "There's no command or project '#{method}' in tmuxinator"
