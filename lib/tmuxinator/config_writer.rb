@@ -52,7 +52,7 @@ module Tmuxinator
       @project_name = yaml["project_name"]
       @project_root = yaml["project_root"]
       @rvm          = yaml["rvm"]
-      @pre          = build_command(yaml["pre"])
+      @pre          = build_command(yaml["pre"], false)
       @tabs         = []
       @socket_name  = yaml['socket_name']
       @settings     = ensure_list(yaml['settings'])
