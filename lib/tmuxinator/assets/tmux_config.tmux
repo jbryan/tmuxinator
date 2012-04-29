@@ -1,9 +1,13 @@
 #!<%= ENV['SHELL'] || '/bin/bash' %>
+# pre needs to be run before starting the server so 
+# if it exports environment variables, they get picked
+# up by the tmux server
+<%= @pre.kind_of?(Array) ? @pre.join(" && ") : @pre %>
+
 tmux <%= socket %> start-server
 
 if ! $(tmux <%= socket %> has-session -t <%=s @project_name %>); then
 cd <%= @project_root || "." %>
-<%= @pre.kind_of?(Array) ? @pre.join(" && ") : @pre %>
 env TMUX= tmux <%= socket %> start-server \; set-option -g base-index 1 \; new-session -d -s <%=s @project_name %> -n <%=s @tabs[0].name %>
 tmux <%= socket %> set-option -t <%=s @project_name %> default-path <%= @project_root %>
 
