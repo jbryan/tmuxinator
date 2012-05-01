@@ -8,7 +8,7 @@ tmux <%= socket %> start-server
 
 if ! $(tmux <%= socket %> has-session -t <%=s @project_name %>); then
 cd <%= @project_root || "." %>
-env <%= environment.collect{ |k,v| "#{k}=#{v}" }.join(" ") %> TMUX= tmux <%= socket %> start-server \; set-option -g base-index 1 \; new-session -d -s <%=s @project_name %> -n <%=s @tabs[0].name %>
+env <%= environment.collect{ |k,v| "#{k}=\"#{v}\"" }.join(" ") %> TMUX= tmux <%= socket %> start-server \; set-option -g base-index 1 \; new-session -d -s <%=s @project_name %> -n <%=s @tabs[0].name %>
 tmux <%= socket %> set-option -t <%=s @project_name %> default-path <%= @project_root %>
 
 <% settings.each do |setting| %>
@@ -16,7 +16,7 @@ tmux <%= socket %> set-option -t <%=s @project_name%> <%= setting %>
 <% end %>
 
 <% environment.each do |key, value| %>
-tmux <%= socket %> set-environment -t <%=s @project_name%> <%= key %> <%= value %>
+tmux <%= socket %> set-environment -t <%=s @project_name%> <%= key %> "<%= value %>"
 <% end %>
 
 <% hotkeys.each do |hotkey| %>
