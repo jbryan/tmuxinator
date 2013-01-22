@@ -11,10 +11,18 @@ cd <%= @project_root || "." %>
 env <%= environment.collect{ |k,v| "#{k}=\"#{v}\"" }.join(" ") %> TMUX= tmux <%= socket %> start-server \; new-session -d -s <%=s @project_name %> -n <%=s @tabs[0].name %>
 tmux <%= socket %> set-option -t <%=s @project_name %> default-path <%= @project_root %>
 
+<% settings.each do |setting| %>
+tmux <%= socket %> set-option -t <%=s @project_name%> <%= setting %>
 <% end %>
 
 <% environment.each do |key, value| %>
 tmux <%= socket %> set-environment -t <%=s @project_name%> <%= key %> "<%= value %>"
+<% end %>
+
+<% hotkeys.each do |hotkey| %>
+tmux <%= socket %> bind-key <%= hotkey %>
+<% end %>
+
 <% @tabs[1..-1].each_with_index do |tab, i| %>
 tmux <%= socket %> new-window -t <%= window(i+1) %> -n <%=s tab.name %>
 <% end %>
